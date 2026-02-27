@@ -1,10 +1,10 @@
 # OpenClaw 高价值使用场景与落地方案调研报告
 
-> 调研时间: 2026 年 2 月 | 版本: v1.0
+> 调研时间: 2026 年 2 月 | 版本: v1.1
 
 ## 摘要
 
-本报告基于 OpenClaw 官方案例展示、Discord 社区数据（2,963 条消息 / 922 位独立开发者）、ClawHub 技能市场（3,286+ 技能 / 1.5M+ 下载）、Twitter/X 高赞内容和多篇技术博客的深度调研，系统梳理了 OpenClaw 的 **10 大高价值使用场景**和**可落地的实施方案**，按分类整理并按优先级排序。
+本报告基于 OpenClaw 官方案例展示、Discord 社区数据（2,963 条消息 / 922 位独立开发者）、ClawHub 技能市场（5,705 技能 / 2,868 精选）、[awesome-openclaw-usecases](https://github.com/hesamsheikh/awesome-openclaw-usecases)（10.7k Stars）、[awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills)（21.6k Stars）、Twitter/X 高赞内容和多篇技术博客的深度调研，系统梳理了 OpenClaw 的 **12 大高价值使用场景**和**可落地的实施方案**，按分类整理并按优先级排序。
 
 ---
 
@@ -20,7 +20,8 @@
 | GitHub Forks | 45,053+ |
 | Discord 成员 | 15,000+ |
 | 达到 100k Stars 时间 | ~8 周 |
-| ClawHub 社区技能 | 3,286+ |
+| ClawHub 注册技能 | 5,705 |
+| ClawHub 精选技能 (去除垃圾/恶意/重复) | 2,868 |
 | ClawHub 总下载 | 1,500,000+ |
 | 贡献者 | 370+ |
 | 主要语言 | TypeScript (85.6%) |
@@ -115,6 +116,41 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 - Discord #showcase 社区
 - [ClawHub CalDAV Calendar Skill](https://clawhub.com/skills/caldav-calendar)
 
+### 1.4 家庭日历与家务助手
+
+**场景描述**: 聚合全家人的日历到每日早间简报，从消息中监控预约信息，管理家庭库存。
+
+**技术方案**:
+- 多日历源聚合（Google / Apple / CalDAV）
+- NLP 从消息中提取预约（"周三牙医"自动加入日历）
+- 家庭库存追踪 + 购物清单生成
+
+**参考来源**:
+- [awesome-openclaw-usecases: Family Calendar](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/family-calendar-household-assistant.md)
+
+### 1.5 个人 CRM
+
+**场景描述**: 从邮件和日历中自动发现并追踪联系人，通过自然语言查询关系网络。
+
+**技术方案**:
+- Gmail/IMAP 扫描 + 日历事件解析
+- 自动建立联系人档案（交互频次、话题、最近联系时间）
+- 自然语言查询："上次和张总聊什么？"
+
+**可用 Skill**: `personal-crm`, `attio-crm`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Personal CRM](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/personal-crm.md)
+
+### 1.6 健康与症状追踪
+
+**场景描述**: 追踪饮食摄入和身体症状以识别触发因素，定时发送检查提醒。
+
+**可用 Skill**: `health-symptom-tracker`, `calorie-counter`, `oura-ring`, `whoop-health`, `fitbit`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Health Tracker](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/health-symptom-tracker.md)
+
 ---
 
 ## 二、开发者工作流
@@ -170,13 +206,45 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 **参考来源**:
 - [OpenClaw GitHub Automation Guide - ClawTank](https://clawtank.dev/blog/openclaw-github-automation-guide)
 
+### 2.4 n8n 工作流编排
+
+**场景描述**: 将 API 调用委派给 n8n 工作流，Agent 从不直接接触凭据。每个集成可视化且可锁定。
+
+**技术方案**:
+- OpenClaw 通过 Webhook 触发 n8n 工作流
+- n8n 管理所有第三方凭据（Agent 零接触）
+- 可视化工作流编辑器降低维护门槛
+- 支持复杂条件分支和错误处理
+
+**安全优势**: 凭据隔离——Agent 只知道 Webhook URL，不接触 API Key
+
+**可用 Skill**: `n8n-api`, `n8n-automation`, `n8n-hub`, `n8n-workflow-automation`
+
+**参考来源**:
+- [awesome-openclaw-usecases: n8n Orchestration](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/n8n-workflow-orchestration.md)
+
+### 2.5 自愈式家庭服务器
+
+**场景描述**: 运行 always-on 基础设施 Agent，拥有 SSH 访问权限、自动化 Cron 任务和跨家庭网络的自愈能力。
+
+**技术方案**:
+- SSH Skill 连接到家庭服务器集群
+- Heartbeat 定期检查服务健康
+- 自动重启失败服务 + 日志分析
+- 异常时 Telegram 告警
+
+**可用 Skill**: `beszel-check`, `docker-ctl`, `proxmox`, `unraid`, `pm2`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Self-Healing Home Server](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/self-healing-home-server.md)
+
 ---
 
 ## 三、浏览器自动化与数据采集
 
 **优先级: P1 — 高落地价值**
 
-**判断依据**: OpenClaw 内置基于 Playwright 的浏览器控制能力，无需编写 CSS 选择器，AI 语义理解页面结构，大幅降低自动化门槛。
+**判断依据**: OpenClaw 内置基于 Playwright 的浏览器控制能力，无需编写 CSS 选择器，AI 语义理解页面结构，大幅降低自动化门槛。awesome-openclaw-skills 收录了 139 个浏览器自动化相关 Skill。
 
 ### 3.1 竞品监控与价格追踪
 
@@ -299,6 +367,21 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 **参考来源**:
 - [官方 Showcase](https://docs.openclaw.ai/zh-CN/start/showcase)
 
+### 5.5 多渠道 AI 客服统一收件箱
+
+**场景描述**: 统一 WhatsApp、Instagram、Email 和 Google Reviews 到一个 AI 驱动的收件箱，7x24 自动回复。
+
+**技术方案**:
+- 多渠道消息汇聚到 OpenClaw Gateway
+- AI 分类意图（咨询/投诉/售后/评价回复）
+- 标准问题自动回复，复杂问题转人工
+- 统一客户画像跨渠道
+
+**可用 Skill**: `crisp`, `helpscout`, `front`, `whatsapp-ultimate`, `telegram-bot`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Multi-Channel Customer Service](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/multi-channel-customer-service.md)
+
 ---
 
 ## 六、多智能体编排
@@ -396,7 +479,34 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 **参考来源**:
 - [SoniaIA Blog - 145k Stars](https://www.soniaia.com/blog/openclaw-ai-agents-human-in-the-loop)
 
-### 8.2 自动化报告生成
+### 8.2 信息聚合与内容消化
+
+**场景描述**: 自动聚合 Reddit/YouTube/HackerNews/RSS 等多源信息，按个人兴趣过滤并生成每日摘要。
+
+**典型案例**:
+- **Daily Reddit Digest** — 基于偏好的 subreddit 策展摘要
+- **Daily YouTube Digest** — 关注频道的新视频自动摘要
+- **Multi-Source Tech News Digest** — 109+ 来源自动聚合，质量评分过滤
+
+**可用 Skill**: `hackernews`, `reddit`, `youtube-summarizer`, `miniflux-news`, `news-aggregator`, `rssaurus`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Daily Reddit Digest](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/daily-reddit-digest.md)
+- [awesome-openclaw-usecases: Multi-Source Tech News](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/multi-source-tech-news-digest.md)
+
+### 8.3 多智能体内容工厂
+
+**场景描述**: 在 Discord 中运行多 Agent 内容流水线——Research Agent、Writing Agent、Thumbnail Agent 各在专用频道工作。
+
+**技术方案**:
+- 多 Agent 通过 Discord 频道通信
+- Research Agent 收集素材 -> Writing Agent 撰写 -> Review Agent 审校
+- 人工在最终频道审批发布
+
+**参考来源**:
+- [awesome-openclaw-usecases: Content Factory](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/content-factory.md)
+
+### 8.4 自动化报告生成
 
 **场景描述**: 周报/月报，从多数据源汇总 + 异常检测。
 
@@ -454,6 +564,79 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 
 ---
 
+## 十一、调研与市场分析
+
+**优先级: P1 — 高落地价值**
+
+**判断依据**: 来自 awesome-openclaw-usecases 的多个高赞案例，将 OpenClaw 从"个人助理"提升为"商业情报工具"。awesome-openclaw-skills 收录了 253 个搜索与调研类 Skill。
+
+### 11.1 市场调研 -> MVP 工厂
+
+**场景描述**: 在 Reddit 和 X 上挖掘真实痛点，然后让 OpenClaw 直接构建解决方案的 MVP。
+
+**技术方案**:
+- 使用 Last30Days Skill 检索近期讨论
+- NLP 提取高频痛点和需求
+- 自动生成产品规格 -> 编码实现 MVP
+- 部署并收集反馈
+
+**可用 Skill**: `last30days`, `reddit`, `x-search`, `deep-research`, `market-research-product-factory`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Market Research & Product Factory](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/market-research-product-factory.md)
+
+### 11.2 AI 财报追踪
+
+**场景描述**: 追踪科技/AI 公司财报，自动化预览、告警和详细摘要。
+
+**可用 Skill**: `finnhub`, `sec-filing-watcher`, `yahoo-data-fetcher`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Earnings Tracker](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/earnings-tracker.md)
+
+### 11.3 个人知识库 (RAG)
+
+**场景描述**: 将 URL、推文、文章投入聊天即可构建可搜索的知识库。
+
+**技术方案**:
+- 发送链接到 Telegram -> Agent 自动提取、索引
+- 向量数据库存储 embedding
+- 语义搜索 + 关键词混合检索
+
+**可用 Skill**: `second-brain`, `knowledge-base`, `raglite`, `semantic-memory-search`, `lancedb-memory`
+
+**参考来源**:
+- [awesome-openclaw-usecases: Knowledge Base RAG](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/knowledge-base-rag.md)
+- [awesome-openclaw-usecases: Semantic Memory Search](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/semantic-memory-search.md)
+
+---
+
+## 十二、自主项目管理
+
+**优先级: P2 — 进阶高价值**
+
+### 12.1 STATE.yaml 自主项目管理
+
+**场景描述**: 使用 STATE.yaml 模式协调多 Agent 项目，子 Agent 并行工作无需编排器开销。
+
+**技术方案**:
+- STATE.yaml 定义项目状态、任务分配
+- 子 Agent 独立领取任务并更新状态
+- 事件驱动的状态变更通知
+- 无中心编排器，减少瓶颈
+
+**参考来源**:
+- [awesome-openclaw-usecases: Autonomous Project Management](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/autonomous-project-management.md)
+
+### 12.2 目标驱动的自主任务
+
+**场景描述**: 倾倒你的想法和目标，让 Agent 自主生成、排期并完成每日任务，甚至在夜间自主构建应用。
+
+**参考来源**:
+- [awesome-openclaw-usecases: Overnight Mini App Builder](https://github.com/hesamsheikh/awesome-openclaw-usecases/blob/main/usecases/overnight-mini-app-builder.md)
+
+---
+
 ## 关键落地注意事项
 
 ### 安全风险
@@ -464,6 +647,28 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 | 供应链攻击 | ClawHub 市场最高下载量技能被发现含恶意代码 | Daniel Lockyer 披露 |
 | Agent 失控 | 用户被 Agent 发送 500 条垃圾消息 | Bloomberg 报道 |
 | 权限过宽 | Agent 意外群发 iMessage 给所有联系人 | Discord 社区 |
+
+### ClawHub 技能安全过滤数据
+
+来自 [awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills)（21.6k Stars）对 ClawHub 5,705 个技能的安全过滤：
+
+| 过滤类别 | 排除数量 | 占比 |
+|----------|----------|------|
+| 垃圾/机器人/测试 | 1,180 | 20.7% |
+| 加密/区块链/金融 | 672 | 11.8% |
+| 重复/近似 | 492 | 8.6% |
+| **恶意代码**（安全审计确认） | **396** | **6.9%** |
+| 非英文 | 8 | 0.1% |
+| **总过滤** | **2,748** | **48.2%** |
+
+**近半数 ClawHub 技能被过滤**，其中 6.9% 确认含恶意代码。这是一个严峻的供应链安全信号。
+
+### 推荐安全工具
+
+- **VirusTotal 集成**: OpenClaw 已与 VirusTotal 合作，可在 ClawHub 页面查看扫描报告
+- **Snyk Skill Security Scanner**: 技能依赖安全扫描
+- **Agent Trust Hub**: Agent 信任评分系统
+- **ClawGuard**: 社区开发的安全仪表板，记录所有工具调用和文件访问
 
 ### 生产部署安全清单
 
@@ -503,15 +708,17 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 
 | 优先级 | 分类 | 推荐原因 | 落地难度 |
 |--------|------|----------|----------|
-| **P0** | 个人助理（早间简报/邮件/日历） | 落地最快、ROI 最高、社区验证最多 | 低 |
-| **P0** | 开发者工作流（PR 审查/CI-CD/Dev Brief） | 原生优势、自动化程度高 | 低-中 |
+| **P0** | 个人助理（早间简报/邮件/日历/CRM/健康） | 落地最快、ROI 最高、社区验证最多 | 低 |
+| **P0** | 开发者工作流（PR 审查/CI-CD/n8n/自愈服务器） | 原生优势、自动化程度高 | 低-中 |
 | **P1** | 浏览器自动化（价格监控/数据采集） | 内置能力、无需额外工具 | 低 |
 | **P1** | 智能家居（Home Assistant 集成） | 成熟插件、20 分钟部署 | 低 |
-| **P1** | 企业业务自动化（电商/发票/客服） | 高 ROI、已有生产验证 | 中 |
+| **P1** | 企业业务自动化（电商/发票/多渠道客服） | 高 ROI、已有生产验证 | 中 |
+| **P1** | 调研与市场分析（RAG 知识库/财报/市场调研） | 商业价值高、Skills 丰富 | 中 |
 | **P2** | 多智能体编排 | 前沿但复杂，需要架构经验 | 高 |
 | **P2** | 金融交易 | 高价值但高风险，需严格安全措施 | 高 |
-| **P2** | 内容创作/社交媒体 | 实用但平台限制多 | 中 |
+| **P2** | 内容创作/社交媒体（内容工厂/信息聚合） | 实用但平台限制多 | 中 |
 | **P2** | 知识管理与记忆 | 长期价值高 | 中 |
+| **P2** | 自主项目管理（STATE.yaml/目标驱动） | 提升 Agent 自主性 | 中-高 |
 | **P3** | 语音与电话 | 前沿探索，延迟和可靠性待验证 | 高 |
 
 ---
@@ -533,6 +740,46 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 
 ---
 
+## ClawHub 精选 Skill 生态概览
+
+来源: [awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills)（2,868 个精选 Skill 分类统计）
+
+| 分类 | Skill 数量 | 代表性 Skill |
+|------|-----------|-------------|
+| AI & LLMs | 287 | `gemini`, `ollama-local`, `promptify`, `research` |
+| Search & Research | 253 | `exa`, `brave-search`, `deep-research`, `last30days` |
+| DevOps & Cloud | 212 | `cloudflare`, `kubernetes`, `vercel`, `docker-ctl` |
+| Web & Frontend Development | 202 | `nextjs-expert`, `shadcn-ui`, `frontend-design` |
+| Marketing & Sales | 143 | `hubspot`, `google-ads`, `seo-audit`, `cold-email` |
+| Browser & Automation | 139 | `playwright-cli`, `browser-use`, `stagehand-browser-cli` |
+| Productivity & Tasks | 135 | `todoist`, `linear`, `jira`, `notion` |
+| Coding Agents & IDEs | 133 | `cursor-agent`, `claude-code-skill`, `coding-agent` |
+| Communication | 132 | `telegram-bot`, `whatsapp-ultimate`, `discord`, `slack` |
+| CLI Utilities | 129 | `ffmpeg-cli`, `jq`, `tldr`, `tmux` |
+| Clawdbot Tools | 120 | `memory`, `cron-creator`, `dashboard`, `clawops` |
+| Notes & PKM | 100 | `obsidian`, `notion`, `bear-notes`, `apple-notes` |
+| Media & Streaming | 80 | `spotify`, `youtube-ultimate`, `radarr`, `sonarr` |
+| Transportation | 76 | `flight-tracker`, `tesla`, `mta`, `tfl` |
+| PDF & Documents | 67 | `docx`, `pdf`, `slides-cog`, `invoice-generator` |
+| Git & GitHub | 66 | `github`, `gitlab-api`, `conventional-commits` |
+| Speech & Transcription | 65 | `elevenlabs-tts`, `whisper`, `deepgram` |
+| Security & Passwords | 64 | `1password`, `bitwarden`, `ggshield-scanner` |
+| Gaming | 61 | `steam`, `pokemon-red`, `chess` |
+| Image & Video Generation | 60 | `fal-ai`, `comfyui`, `pollinations`, `sora-video-gen` |
+| Smart Home & IoT | 56 | `home-assistant`, `philips-hue`, `wled`, `mqtt-client` |
+| Personal Development | 56 | `therapy-mode`, `quit-smoking`, `daily-stoic` |
+| Health & Fitness | 55 | `strava`, `oura`, `whoop`, `garmin-health` |
+| Moltbook (社交网络) | 51 | `moltbook`, `moltbook-interact` |
+| Shopping & E-commerce | 51 | `shopify-admin-api`, `price-tracker`, `amazon-competitor-analyzer` |
+| Calendar & Scheduling | 50 | `google-calendar`, `apple-calendar`, `caldav-calendar` |
+| Data & Analytics | 46 | `supabase`, `duckdb-en`, `google-analytics-api` |
+| Self-Hosted & Automation | 25 | `n8n`, `paperless-ngx`, `cron-backup` |
+| Finance | 22 | `ynab`, `plaid`, `expense-tracker-pro` |
+| Agent-to-Agent Protocols | 18 | `a2a`, `claw-to-claw`, `agent-shield` |
+| iOS & macOS Development | 17 | `apple-docs`, `swiftui-liquid-glass`, `xcodebuildmcp` |
+
+---
+
 ## 附录：参考链接汇总
 
 ### 官方资源
@@ -545,6 +792,10 @@ openclaw cron add --name "Morning brief" --cron "0 7 * * *" \
 - [SoniaIA: 145k Stars 分析报告](https://www.soniaia.com/blog/openclaw-ai-agents-human-in-the-loop)
 - [Medium: 10 Wild Things People Built](https://medium.com/@alexrozdolskiy/10-wild-things-people-actually-built-with-openclaw-e18f487cb3e0)
 - [ClawHub Top Skills 2026](https://clawoneclick.com/en/blog/clawhub-top-skills-2026)
+
+### 社区精选合集
+- [awesome-openclaw-usecases](https://github.com/hesamsheikh/awesome-openclaw-usecases) — 社区使用案例集（10.7k Stars, 799 Forks）
+- [awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills) — 社区技能精选集（21.6k Stars, 2.2k Forks, 2,868 个精选 Skill）
 
 ### 技术指南
 - [Telegram Morning Briefing](https://www.clawctl.com/connect/telegram-ai-morning-briefings)
